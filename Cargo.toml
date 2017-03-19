@@ -5,3 +5,8 @@ authors = ["C-Bouthoorn <cbouthoorn19@gmail.com>"]
 
 [dependencies]
 feroxide = "*"
+
+
+[dependencies.gtk]
+version = "*"
+features = ["v3_18"]
