@@ -1,0 +1,7 @@
+[package]
+name = "feroxide-gui"
+version = "0.0.1"
+authors = ["C-Bouthoorn <cbouthoorn19@gmail.com>"]
+
+[dependencies]
+feroxide = "*"
