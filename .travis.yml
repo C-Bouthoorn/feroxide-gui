@@ -14,7 +14,8 @@ addons:
       - libgtk-3-dev
 
 env:
-  - GTK=3.18
+  - GTK=latest
+  - GTK=3.4
 
 script:
   - ./build.sh
@@ -22,3 +23,4 @@ script:
 matrix:
   allow_failures:
     - rust: nightly
+    - env: GTK=latest
