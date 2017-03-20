@@ -1,11 +1,32 @@
 extern crate feroxide;
 use feroxide::*;
-// use feroxide::data_atoms::*;
+use feroxide::data_atoms::*;
 
 
 extern crate gtk;
 use gtk::prelude::*;
 use gtk::*;
+
+use std::rc::Rc;
+use std::cell::RefCell;
+
+
+macro_rules! clone {
+    (@param _) => ( _ );
+    (@param $x:ident) => ( $x );
+    ($($n:ident),+ => move || $body:expr) => (
+        {
+            $( let $n = $n.clone(); )+
+            move || $body
+        }
+    );
+    ($($n:ident),+ => move |$($p:tt),+| $body:expr) => (
+        {
+            $( let $n = $n.clone(); )+
+            move |$(clone!(@param $p),)+| $body
+        }
+    );
+}
 
 
 fn main() {
@@ -18,10 +39,10 @@ fn main() {
 
 
     // Create container
-    let mut fo_container = feroxide::Container::<Molecule> {
+    let mut fo_container = Rc::new(RefCell::new(feroxide::Container::<Molecule> {
         contents: vec! {},
         available_energy: 0.0
-    };
+    }));
 
 
     // Create window
@@ -57,13 +78,14 @@ fn main() {
     /*
     let item = MenuItem::new_with_label("Add one");
 
+    #[derive(Clone)]
     struct Variable {
         pub value: u32
     }
 
-    let mut x = Variable {
+    let mut x = Rc::new(RefCell::new(Variable {
         value: 0
-    };
+    }));
 
     impl Variable {
         pub fn add(&mut self, x: u32) {
@@ -71,21 +93,25 @@ fn main() {
         }
     }
 
-    item.connect_activate(move |_| {
-        x.add(10);
-    });
+    item.connect_activate(clone!(x => move |_| {
+        x.borrow_mut().add(10);
+    }));
     */
 
-    item_hydrogen.connect_activate(move |_| {
-        /*
+
+    item_hydrogen.connect_activate(clone!(fo_container => move |_| {
+        let mut fo_container = fo_container.borrow_mut();
+
         fo_container.add_elements(&vec! {
             ContainerCompound {
                 element: molecule_from_atom!(HYDROGEN),
                 moles: 10.0
             }
         });
-        */
-    });
+
+        println!("{}", fo_container.stringify());
+    }));
+
 
     window.add(& menu_bar);
 
