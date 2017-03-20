@@ -8,6 +8,17 @@ rust:
   - beta
   - nightly
 
+addons:
+  apt:
+    packages:
+      - libgtk-3-dev
+
+env:
+  - GTK=3.18
+
+script:
+  - ./build.sh
+
 matrix:
   allow_failures:
     - rust: nightly
