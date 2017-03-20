@@ -75,28 +75,6 @@ fn main() {
 
     menu_bar.append(& item_add);
 
-    /*
-    let item = MenuItem::new_with_label("Add one");
-
-    #[derive(Clone)]
-    struct Variable {
-        pub value: u32
-    }
-
-    let mut x = Rc::new(RefCell::new(Variable {
-        value: 0
-    }));
-
-    impl Variable {
-        pub fn add(&mut self, x: u32) {
-            self.value += x;
-        }
-    }
-
-    item.connect_activate(clone!(x => move |_| {
-        x.borrow_mut().add(10);
-    }));
-    */
 
 
     item_hydrogen.connect_activate(clone!(fo_container => move |_| {
@@ -105,6 +83,20 @@ fn main() {
         fo_container.add_elements(&vec! {
             ContainerCompound {
                 element: molecule_from_atom!(HYDROGEN),
+                moles: 10.0
+            }
+        });
+
+        println!("{}", fo_container.stringify());
+    }));
+
+
+    item_oxygen.connect_activate(clone!(fo_container => move |_| {
+        let mut fo_container = fo_container.borrow_mut();
+
+        fo_container.add_elements(&vec! {
+            ContainerCompound {
+                element: molecule_from_atom!(OXYGEN),
                 moles: 10.0
             }
         });
