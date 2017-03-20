@@ -5,8 +5,10 @@ authors = ["C-Bouthoorn <cbouthoorn19@gmail.com>"]
 
 [dependencies]
 feroxide = "1.1.0"
+gtk = "^0"
 
-
-[dependencies.gtk]
-version = "*"
-features = ["v3_18"]
+[features]
+default = ["gtk_3_18"]
+gtk_3_10 = ["gtk/v3_10"]
+gtk_3_16 = ["gtk_3_10", "gtk/v3_16"]
+gtk_3_18 = ["gtk_3_16", "gtk/v3_18"]
