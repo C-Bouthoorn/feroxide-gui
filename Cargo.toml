@@ -4,7 +4,7 @@ version = "0.0.1"
 authors = ["C-Bouthoorn <cbouthoorn19@gmail.com>"]
 
 [dependencies]
-feroxide = "1.1.0"
+feroxide = "1.2.0"
 gtk = "^0"
 
 [features]
