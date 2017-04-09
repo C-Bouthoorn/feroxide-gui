@@ -35,19 +35,20 @@ fn main() {
     println!("Hello World!");
 
     // Testing feroxide
-    println!("Water has {} g/mol", Molecule::from_string("H2O".to_owned()).unwrap().mass());
+    println!("Water has {} g/mol",
+             Molecule::from_string("H2O".to_owned()).unwrap().mass());
 
 
     // Get reaction
-    let reaction_water = ElemReaction::<Molecule>::
-                            molecule_from_string("2H2 + O2 → 2H2O".to_owned()).unwrap();
+    let reaction_water =
+        ElemReaction::<Molecule>::molecule_from_string("2H2 + O2 → 2H2O".to_owned()).unwrap();
 
 
     // Create container
     let mut fo_container = Rc::new(RefCell::new(feroxide::Container::<Molecule> {
-        contents: vec! {},
-        available_energy: 0.0
-    }));
+                                                    contents: vec![],
+                                                    available_energy: 0.0,
+                                                }));
 
 
 
@@ -64,9 +65,9 @@ fn main() {
     window.set_size_request(400, 400);
 
     window.connect_delete_event(|_, _| {
-        gtk::main_quit();
-        Inhibit(false)
-    });
+                                    gtk::main_quit();
+                                    Inhibit(false)
+                                });
 
 
     //////// Menu bar
@@ -76,43 +77,43 @@ fn main() {
     // Add
     let menu_add = Menu::new();
     let item_add = MenuItem::new_with_label("Add");
-    item_add.set_submenu(Some(& menu_add));
+    item_add.set_submenu(Some(&menu_add));
 
-    menu_bar.append(& item_add);
+    menu_bar.append(&item_add);
 
     // Add > Atoms
     let menu_add_atoms = Menu::new();
     let item_add_atoms = MenuItem::new_with_label("Atoms");
-    item_add_atoms.set_submenu(Some(& menu_add_atoms));
-    menu_add.append(& item_add_atoms);
+    item_add_atoms.set_submenu(Some(&menu_add_atoms));
+    menu_add.append(&item_add_atoms);
 
     // Add > Atoms > Hydrogen
     let item_add_atoms_hydrogen = MenuItem::new_with_label("H: hydrogen");
-    menu_add_atoms.append(& item_add_atoms_hydrogen);
+    menu_add_atoms.append(&item_add_atoms_hydrogen);
 
     // Add > Atoms > Oxygen
     let item_add_atoms_oxygen = MenuItem::new_with_label("O: oxygen");
-    menu_add_atoms.append(& item_add_atoms_oxygen);
+    menu_add_atoms.append(&item_add_atoms_oxygen);
 
 
     // Add > Energy
     let item_add_energy = MenuItem::new_with_label("Energy: 100J");
-    menu_add.append(& item_add_energy);
+    menu_add.append(&item_add_energy);
 
 
     // React
     let menu_react = Menu::new();
     let item_react = MenuItem::new_with_label("React");
-    item_react.set_submenu(Some(& menu_react));
-    menu_bar.append(& item_react);
+    item_react.set_submenu(Some(&menu_react));
+    menu_bar.append(&item_react);
 
     // React > Water
     let item_react_water = MenuItem::new_with_label(reaction_water.symbol().as_str());
-    menu_react.append(& item_react_water);
+    menu_react.append(&item_react_water);
 
 
 
-    window.add(& menu_bar);
+    window.add(&menu_bar);
 
 
     item_add_atoms_hydrogen.connect_activate(clone!(fo_container => move |_| {

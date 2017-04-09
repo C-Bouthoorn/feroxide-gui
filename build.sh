@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Taken from  https://github.com/gtk-rs/examples
 
