@@ -1,11 +1,25 @@
 [package]
 name = "feroxide-gui"
 version = "0.0.1"
-authors = ["C-Bouthoorn <cbouthoorn19@gmail.com>"]
+authors = ["feroxide"]
+
+description = "A basic chemistry simulator (GUI)"
+documentation = "https://github.com/feroxide/feroxide-gui"
+homepage = "https://feroxide.github.io/feroxide/"
+repository = "https://github.com/feroxide/feroxide-gui"
+
+readme = "README.md"
+
+keywords = ["chemistry", "simulator", "mit"]
+categories = ["gui", "science"]
+
+license-file = "LICENSE"
+
 
 [dependencies]
 feroxide = "1.2.0"
-gtk = "^0"
+gtk = "0.1.2"
+
 
 [features]
 default = ["gtk_3_18"]
