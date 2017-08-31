@@ -47,7 +47,7 @@ fn main() {
     // Create container
     let mut fo_container = Rc::new(RefCell::new(feroxide::Container::<Molecule> {
                                                     contents: vec![],
-                                                    available_energy: 0.0,
+                                                    available_energy: Energy::from(0.0),
                                                 }));
 
 
@@ -119,12 +119,12 @@ fn main() {
     item_add_atoms_hydrogen.connect_activate(clone!(fo_container => move |_| {
         let mut fo_container = fo_container.borrow_mut();
 
-        fo_container.add_elements(&vec! {
+        fo_container.add_elements(&[
             ContainerCompound {
                 element: molecule_from_atom!(HYDROGEN),
-                moles: 10.0
+                moles: Moles::from(10.0)
             }
-        });
+        ]);
 
         println!("{}", fo_container.stringify());
     }));
@@ -133,12 +133,12 @@ fn main() {
     item_add_atoms_oxygen.connect_activate(clone!(fo_container => move |_| {
         let mut fo_container = fo_container.borrow_mut();
 
-        fo_container.add_elements(&vec! {
+        fo_container.add_elements(&[
             ContainerCompound {
                 element: molecule_from_atom!(OXYGEN),
-                moles: 10.0
+                moles: Moles::from(10.0)
             }
-        });
+        ]);
 
         println!("{}", fo_container.stringify());
     }));
@@ -147,7 +147,7 @@ fn main() {
     item_add_energy.connect_activate(clone!(fo_container => move |_| {
         let mut fo_container = fo_container.borrow_mut();
 
-        fo_container.available_energy += 100.0;
+        fo_container.available_energy += Energy::from(100.0);
 
         println!("{}", fo_container.stringify());
     }));
