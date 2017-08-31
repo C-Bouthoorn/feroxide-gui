@@ -5,8 +5,8 @@ mode="$1"
 if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then
   if [ "$mode" = "install" ]; then
     # Test if clippy is already installed (cache)
-    cargo clippy &> /dev/null
-    if [ $? -ne 101 ]; then
+    if cargo clippy -V; then
+      echo "Clippy already installed, skipping installation"
       exit 0
     fi
 
