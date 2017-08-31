@@ -105,7 +105,7 @@ fn main() {
                         &string,
                         &mut glyphs,
                         &ctx.draw_state,
-                        ctx.transform.trans(10.0, (line_nr * FONT_SIZE * 2) as Scalar),
+                        ctx.transform.trans(10.0, Scalar::from(line_nr * FONT_SIZE * 2)),
                         g2d,
                     );
 
