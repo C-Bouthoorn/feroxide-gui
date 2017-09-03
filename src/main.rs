@@ -204,7 +204,7 @@ fn main() {
             line_nr += 1;
 
             // Write contents
-            for item in container.contents.iter() {
+            for item in &container.contents {
                 //print_line(&item.stringify(), colors::BLACK, line_nr, &mut glyphs, ctx, g2d);
                 print_reaction_string(&item.stringify(), colors::BLACK, line_nr, &mut glyphs, ctx, g2d, None);
                 line_nr += 1;
