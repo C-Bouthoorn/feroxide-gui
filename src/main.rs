@@ -100,20 +100,22 @@ fn main() {
             // Clear screen
             clear(colors::WHITE, g2d);
 
-            let mut printer = Printer {
-                font_size: FONT_SIZE,
-                glyphs: get_glyphs(factory.clone()),
-                ctx: ctx,
-                line_nr: 1,
-            };
+            let mut printer = Printer::new(
+                FONT_SIZE,
+                get_glyphs(factory.clone()),
+                ctx,
+            );
 
 
             // Write reactions
-            printer.print_molecule_string_with_prefix("> ", colors::RED, &water_reaction_right.stringify(), colors::BLACK, g2d);
-            printer.print_molecule_string_with_prefix("< ", colors::RED, &water_reaction_left.stringify(), colors::BLACK, g2d);
+            printer.print("> ", colors::RED, g2d);
+            printer.print_molecule_string_ln(&water_reaction_right.stringify(), colors::BLACK, g2d);
+
+            printer.print("< ", colors::RED, g2d);
+            printer.print_molecule_string_ln(&water_reaction_left.stringify(), colors::BLACK, g2d);
 
 
-            printer.print_ln("", colors::WHITE, g2d);
+            printer.newline();
 
             // Write energy
             let energy_color =
@@ -125,9 +127,10 @@ fn main() {
 
             printer.print_ln(&format!("{} J", container.available_energy), energy_color, g2d);
 
+
             // Write contents
             for molecule in &container.contents {
-                printer.print_molecule_string(&molecule.stringify(), colors::BLACK, g2d, None);
+                printer.print_molecule_string_ln(&molecule.stringify(), colors::BLACK, g2d);
             }
 
         });
