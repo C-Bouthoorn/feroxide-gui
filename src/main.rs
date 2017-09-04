@@ -4,10 +4,10 @@ use feroxide_gui::*;
 extern crate feroxide;
 use feroxide::*;
 
-extern crate piston_window;
 use piston_window::*;
 use piston_window::types::*;
-use piston_window::character::CharacterCache;
+
+extern crate gfx_device_gl;
 
 use std::process;
 
@@ -40,89 +40,17 @@ fn set_up_window() -> PistonWindow {
     window
 }
 
-fn get_glyphs(window: &PistonWindow) -> Glyphs {
-    let factory = window.factory.clone();
+
+fn get_glyphs(factory: gfx_device_gl::Factory) -> Glyphs {
     let texture_settings = TextureSettings::new();
 
     Glyphs::new(FONT_PATH, factory, texture_settings).unwrap()
 }
 
 
-fn print_line(string: &str, color: Color, line_nr: u32, glyphs: &mut Glyphs, ctx: Context, g2d: &mut G2d) {
-    text::Text::new_color(color, FONT_SIZE)
-        .draw(
-            string,
-
-            glyphs,
-            &ctx.draw_state,
-            ctx.transform.trans(10.0, Scalar::from(line_nr * FONT_SIZE * 2)),
-            g2d,
-        );
-}
-
-
-
-fn print_reaction_string(reaction_string: &str, color: Color, line_nr: u32, glyphs: &mut Glyphs, ctx: Context, g2d: &mut G2d, x_padding: Option<Scalar>) {
-    let color_text_full = text::Text::new_color(color, FONT_SIZE);
-    let color_text_half = text::Text::new_color(color, FONT_SIZE / 2);
-
-    let mut is_subscript = false;
-    let mut is_superscript = false;
-    let mut x = 10.0;
-
-    if let Some(x_padding) = x_padding {
-        x += x_padding;
-    }
-
-    for c in reaction_string.chars() {
-        if c == '_' {
-            is_subscript = true;
-            continue;
-        }
-        else if c == '^' {
-            is_superscript = true;
-            continue;
-        }
-        else if c == '{' {
-            continue;
-        }
-        else if c == '}' {
-            is_subscript = false;
-            is_superscript = false;
-            continue;
-        }
-
-
-        let color_text =
-            if is_subscript || is_superscript {
-                color_text_half
-            } else {
-                color_text_full
-            };
-
-        let mut y = Scalar::from(line_nr * FONT_SIZE * 2);
-
-        if is_superscript {
-            y -= Scalar::from(color_text.font_size);
-        }
-
-        color_text.draw(
-            &c.to_string(),
-
-            glyphs,
-            &ctx.draw_state,
-            ctx.transform.trans(x, y),
-            g2d,
-        );
-
-        x += glyphs.width(color_text.font_size, &c.to_string());
-    }
-}
-
-
 fn main() {
     let mut window = set_up_window();
-    let mut glyphs = get_glyphs(&window);
+    let factory = window.factory.clone();
 
     let mut container = Container {
         contents: vec! {
@@ -172,25 +100,20 @@ fn main() {
             // Clear screen
             clear(colors::WHITE, g2d);
 
-            #[allow(unused_assignments)]
-            let mut line_nr = 1;
+            let mut printer = Printer {
+                font_size: FONT_SIZE,
+                glyphs: get_glyphs(factory.clone()),
+                ctx: ctx,
+                line_nr: 1,
+            };
+
 
             // Write reactions
-            // TODO: DRY
-            let prefix = "> ";
-            print_line(prefix, colors::RED, line_nr, &mut glyphs, ctx, g2d);
-            let width = glyphs.width(FONT_SIZE, prefix);
-            print_reaction_string(&water_reaction_right.stringify(), colors::BLACK, line_nr, &mut glyphs, ctx, g2d, Some(width));
-            line_nr += 1;
+            printer.print_molecule_string_with_prefix("> ", colors::RED, &water_reaction_right.stringify(), colors::BLACK, g2d);
+            printer.print_molecule_string_with_prefix("< ", colors::RED, &water_reaction_left.stringify(), colors::BLACK, g2d);
 
-            let prefix = "< ";
-            print_line(prefix, colors::RED, line_nr, &mut glyphs, ctx, g2d);
-            let width = glyphs.width(FONT_SIZE, prefix);
-            print_reaction_string(&water_reaction_left.stringify(), colors::BLACK, line_nr, &mut glyphs, ctx, g2d, Some(width));
-            line_nr += 1;
 
-            // New line
-            line_nr += 1;
+            printer.print_ln("", colors::WHITE, g2d);
 
             // Write energy
             let energy_color =
@@ -200,14 +123,11 @@ fn main() {
                     colors::GREEN
                 };
 
-            print_line(&format!("{} J", container.available_energy), energy_color, line_nr, &mut glyphs, ctx, g2d);
-            line_nr += 1;
+            printer.print_ln(&format!("{} J", container.available_energy), energy_color, g2d);
 
             // Write contents
-            for item in &container.contents {
-                //print_line(&item.stringify(), colors::BLACK, line_nr, &mut glyphs, ctx, g2d);
-                print_reaction_string(&item.stringify(), colors::BLACK, line_nr, &mut glyphs, ctx, g2d, None);
-                line_nr += 1;
+            for molecule in &container.contents {
+                printer.print_molecule_string(&molecule.stringify(), colors::BLACK, g2d, None);
             }
 
         });
