@@ -27,14 +27,13 @@ const CTRL_C: &str = "\u{3}";
 fn set_up_window() -> PistonWindow {
     let window_settings = WindowSettings::new(TITLE, DIMENSIONS)
         .decorated(true)
-        .exit_on_esc(true)
         .maybe_opengl(OPENGL)
         .resizable(true)
         .vsync(false);
 
     let mut window: PistonWindow = window_settings.build().unwrap();
 
-    window.set_lazy(false);
+    window.set_lazy(true);
     window.set_max_fps(60);
 
     window
