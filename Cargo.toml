@@ -21,7 +21,7 @@ license-file = "LICENSE"
 piston_window = "0.70.0"
 image = "0.15.0"
 vecmath = "0.3.0"
-gfx_device_gl = "^0"
+gfx_device_gl = "0.14.3"
 
 [dependencies.feroxide]
 version = "1.3.2"
