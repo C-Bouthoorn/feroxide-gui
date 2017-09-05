@@ -1,6 +1,6 @@
 [package]
 name = "feroxide-gui"
-version = "1.0.1"
+version = "1.1.0"
 authors = ["feroxide"]
 
 description = "A basic chemistry simulator (GUI)"
