@@ -1,9 +1,12 @@
 pub extern crate piston_window;
 
+pub mod colors;
+
 mod printer;
 pub use printer::*;
 
-pub mod colors;
+mod sidebar;
+pub use sidebar::*;
 
 
 #[cfg(test)]

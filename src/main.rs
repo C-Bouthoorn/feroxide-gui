@@ -14,7 +14,21 @@ use std::process;
 
 // You could specify another OpenGL version here,
 // `None` will use the default one
-const OPENGL: Option<OpenGL> = None;
+/*
+V2_0,
+V2_1,
+V3_0,
+V3_1,
+V3_2,
+V3_3,
+V4_0,
+V4_1,
+V4_2,
+V4_3,
+V4_4,
+V4_5,
+*/
+const OPENGL: Option<OpenGL> = Some(OpenGL::V2_0);
 
 const TITLE: &str = "Feroxide";
 const DIMENSIONS: (u32, u32) = (500, 500);
@@ -54,6 +68,9 @@ fn main() {
     let factory = window.factory.clone();
 
 
+    let mut sidebar = Sidebar::new((100.0, Scalar::from(window.size().height)), (0.0, 0.0));
+
+
     let mut container = Container {
         contents: vec! {
             ContainerCompound {
@@ -85,6 +102,9 @@ fn main() {
             }
         }
         */
+
+        sidebar.event(&event);
+
 
         if let Some(string) = event.text_args() {
             if string == ">" {
