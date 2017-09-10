@@ -65,6 +65,7 @@ impl Printer {
         let mut is_subscript = false;
         let mut is_superscript = false;
 
+        // Parse string
         for c in molecule_string.chars() {
             if c == '_' {
                 is_subscript = true;
@@ -84,20 +85,23 @@ impl Printer {
             }
 
 
-            let color_text =
+            // Get the correct Text to work with
+            let text =
                 if is_subscript || is_superscript {
                     color_text_half
                 } else {
                     color_text_full
                 };
 
+            // Calculate height
             let mut y = Scalar::from(self.line_nr * self.font_size * 2);
 
             if is_superscript {
-                y -= Scalar::from(color_text.font_size);
+                y -= Scalar::from(text.font_size);
             }
 
-            color_text.draw(
+            // Draw text
+            text.draw(
                 &c.to_string(),
 
                 &mut self.glyphs,
@@ -106,7 +110,8 @@ impl Printer {
                 g2d,
             );
 
-            self.left_padding += self.glyphs.width(color_text.font_size, &c.to_string());
+            // Add left padding
+            self.left_padding += self.glyphs.width(text.font_size, &c.to_string());
         }
     }
 

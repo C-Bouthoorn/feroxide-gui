@@ -13,7 +13,7 @@ use std::process;
 
 
 // You could specify another OpenGL version here,
-// None will use the default one
+// `None` will use the default one
 const OPENGL: Option<OpenGL> = None;
 
 const TITLE: &str = "Feroxide";
@@ -24,6 +24,7 @@ const FONT_SIZE: FontSize = 20;
 const CTRL_C: &str = "\u{3}";
 
 
+/// Create a window with the default settings
 fn set_up_window() -> PistonWindow {
     let window_settings = WindowSettings::new(TITLE, DIMENSIONS)
         .decorated(true)
@@ -40,6 +41,7 @@ fn set_up_window() -> PistonWindow {
 }
 
 
+/// Get the glyphs using the factory
 fn get_glyphs(factory: gfx_device_gl::Factory) -> Glyphs {
     let texture_settings = TextureSettings::new();
 
@@ -50,6 +52,7 @@ fn get_glyphs(factory: gfx_device_gl::Factory) -> Glyphs {
 fn main() {
     let mut window = set_up_window();
     let factory = window.factory.clone();
+
 
     let mut container = Container {
         contents: vec! {
@@ -94,6 +97,7 @@ fn main() {
                 process::exit(0);
             }
         }
+
 
         window.draw_2d(&event, |ctx, g2d| {
             // Clear screen
